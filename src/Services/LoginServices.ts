@@ -8,8 +8,11 @@ export const loginAuth = async (
     password: string, 
     setError: (message: string) => void
 ): Promise<void> => {
+
+
+    
     try {
-        const response = await fetch('https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/auth/login', {
+        const response = await fetch('https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/auth/authenticate', {
             method: 'POST',
             body: JSON.stringify({ username, password }),
             headers: { 'Content-Type': 'application/json' },
