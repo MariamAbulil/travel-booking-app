@@ -1,29 +1,36 @@
-import React from "react";
-import './style.css'
+import React, { useState } from "react";
+import { Tabs, Tab, Box } from "@mui/material";
+import "./style.css";
+import CitiesTable from "../CitiesTable";
+import HotelsTable from "../HotelsTable";
 
 const Sidebar: React.FC = () => {
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
   return (
-    <div className="sidebar">
-      <h3 className="sidebar-title">Admin Dashboard</h3>
-      <ul className="sidebar-menu">
-        <li>
-          <a href="#cities" className="sidebar-link">
-            🏙️ Manage Cities
-          </a>
-        </li>
-        <li>
-          <a href="#hotels" className="sidebar-link">
-            🏨 Manage Hotels
-          </a>
-        </li>
-        <li>
-          <a href="#reservations" className="sidebar-link">
-            📅 Manage Reservations
-          </a>
-        </li>
-        
-      </ul>
-    </div>
+    <Box display="flex">
+      <Box className="sidebar">
+        <h3 className="sidebar-title">Admin Dashboard</h3>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="admin dashboard tabs"
+          orientation="vertical"
+          className="sidebar-tabs"
+        >
+          <Tab label="🏙️ Manage Cities" tabIndex={0} />
+          <Tab label="🏨 Manage Hotels" tabIndex={1} />
+        </Tabs>
+      </Box>
+      <Box className="tab-content">
+        {value === 0 && <CitiesTable />}
+        {value === 1 && <HotelsTable />}
+      </Box>
+    </Box>
   );
 };
 

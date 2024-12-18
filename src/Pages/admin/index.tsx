@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../Components/Admin/Sidebar/index";
-import SearchBar from "../../Components/Admin/SearchBar/index";
-import Table from "../../Components/Admin/Table";
-import SlidingForm from "../../Components/Admin/SlidingForm";
 import "./style.css";
 
 const AdminPage: React.FC = () => {
@@ -37,21 +34,7 @@ const AdminPage: React.FC = () => {
 
   return (
     <div className="admin-page">
-      {/* Sidebar */}
-      <Sidebar/>
-
-      <div className="content">
-        {/* Search Bar */}
-        <SearchBar onSearch={fetchData} />
-
-        {/* Table */}
-        <Table data={data} onEdit={handleEdit} />
-
-        {/* Sliding Window Form */}
-        {isSlidingFormOpen && (
-          <SlidingForm item={selectedItem} onClose={handleFormClose} onRefresh={fetchData} />
-        )}
-      </div>
+      <Sidebar />
     </div>
   );
 };

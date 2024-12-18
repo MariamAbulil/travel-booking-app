@@ -129,7 +129,7 @@ const CitiesTable: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="flex gap-4 flex-col items-start">
       <TextField
         label="Search Cities"
         variant="outlined"
