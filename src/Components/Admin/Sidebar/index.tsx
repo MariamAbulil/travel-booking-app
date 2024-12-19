@@ -1,14 +1,25 @@
 import React, { useState } from "react";
 import { Tabs, Tab, Box } from "@mui/material";
-import "./style.css";
+import { useNavigate } from "react-router-dom";
 import CitiesTable from "../CitiesTable";
 import HotelsTable from "../HotelsTable";
 
+import "./style.css";
+
 const Sidebar: React.FC = () => {
+  const navigate = useNavigate();
   const [value, setValue] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const handleLogout = () => {
+    // delete token from LocalStorage
+    localStorage.setItem("authToken", "");
+
+    // go to login page
+    navigate("/login");
   };
 
   return (
@@ -24,6 +35,7 @@ const Sidebar: React.FC = () => {
         >
           <Tab label="🏙️ Manage Cities" tabIndex={0} />
           <Tab label="🏨 Manage Hotels" tabIndex={1} />
+          <Tab label="Logout" onClick={() => handleLogout()} />
         </Tabs>
       </Box>
       <Box className="tab-content">

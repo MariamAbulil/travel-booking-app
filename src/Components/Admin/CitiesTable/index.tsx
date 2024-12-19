@@ -15,13 +15,9 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
+import { addCity, City, getCities, removeCity } from "../../../Services/AdminServices";
 
 // Define types for the city data based on the API response
-interface City {
-  id?: number;
-  name: string;
-  description: string;
-}
 
 const CitiesTable: React.FC = () => {
   const [cities, setCities] = useState<City[]>([]); // Store cities data
@@ -39,10 +35,7 @@ const CitiesTable: React.FC = () => {
 
   // Fetch cities data based on page number and page size
   const fetchCities = async (pageNumber: number, pageSize: number) => {
-    const response = await fetch(
-      `https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/cities?pageSize=${pageSize}&pageNumber=${pageNumber + 1}`
-    );
-    const data: City[] = await response.json();
+    const data = await getCities(pageNumber, pageSize);
 
     setCities(data || []); // Update cities state with fetched data
     setTotalCities(data.length); // Update total cities count
@@ -66,17 +59,9 @@ const CitiesTable: React.FC = () => {
 
   // Handle removing a city
   const handleRemoveCity = async (cityId: number) => {
-    const response = await fetch(
-      `https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/cities/${cityId}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      }
-    );
+    const result = await removeCity(cityId);
 
-    if (response.ok) {
+    if (result) {
       // Remove city from state after successful deletion
       setCities(cities.filter((city) => city.id !== cityId));
       setTotalCities(totalCities - 1); // Decrease the total count of cities
@@ -88,20 +73,9 @@ const CitiesTable: React.FC = () => {
 
   // Handle creating a new city
   const handleCreateCity = async () => {
-    const response = await fetch(
-      `https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/cities`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-        body: JSON.stringify(newCity),
-      }
-    );
+    const createdCity = await addCity(newCity);
 
-    if (response.ok) {
-      const createdCity = await response.json();
+    if (createdCity) {
       setCities([...cities, createdCity]);
       setFilteredCities([...filteredCities, createdCity]); // Add to filtered cities
       setOpenDialog(false); // Close the dialog after creating the city
@@ -173,7 +147,7 @@ const CitiesTable: React.FC = () => {
       </TableContainer>
 
       <TablePagination
-        rowsPerPageOptions={[2, 5, 20, 30, 50]}
+        rowsPerPageOptions={[10, 20, 30, 50]}
         component="div"
         count={filteredCities.length} // Update total count with the filtered cities length
         rowsPerPage={pageSize}

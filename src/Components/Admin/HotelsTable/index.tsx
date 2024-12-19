@@ -15,17 +15,9 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
+import { addHotel, getHotels, Hotel, removeHotel } from "../../../Services/AdminServices";
 
 // Define types for the hotel data based on the updated API response
-interface Hotel {
-  id?: number;
-  name: string;
-  description: string;
-  hotelType: number;
-  latitude: number;
-  longitude: number;
-  starRating: number;
-}
 
 const HotelsTable: React.FC = () => {
   const [hotels, setHotels] = useState<Hotel[]>([]); // Store hotels data
@@ -51,10 +43,7 @@ const HotelsTable: React.FC = () => {
 
   // Fetch hotels data based on page number and page size
   const fetchHotels = async (pageNumber: number, pageSize: number) => {
-    const response = await fetch(
-      `https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/hotels?pageSize=${pageSize}&pageNumber=${pageNumber + 1}`
-    );
-    const data: Hotel[] = await response.json();
+    const data = await getHotels(pageNumber, pageSize);
 
     setHotels(data || []); // Update hotels state with fetched data
     setTotalHotels(data.length); // Update total hotels count
@@ -78,17 +67,9 @@ const HotelsTable: React.FC = () => {
 
   // Handle removing a hotel
   const handleRemoveHotel = async (hotelId: number) => {
-    const response = await fetch(
-      `https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/hotels/${hotelId}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      }
-    );
+    const result = await removeHotel(hotelId)
 
-    if (response.ok) {
+    if (result) {
       // Remove hotel from state after successful deletion
       setHotels(hotels.filter((hotel) => hotel.id !== hotelId));
       setTotalHotels(totalHotels - 1); // Decrease the total count of hotels
@@ -100,20 +81,9 @@ const HotelsTable: React.FC = () => {
 
   // Handle creating a new hotel
   const handleCreateHotel = async () => {
-    const response = await fetch(
-      `https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/hotels`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-        body: JSON.stringify(newHotel),
-      }
-    );
+    const createdHotel = await addHotel(newHotel)
 
-    if (response.ok) {
-      const createdHotel = await response.json();
+    if (createdHotel) {
       setHotels([...hotels, createdHotel]);
       setFilteredHotels([...filteredHotels, createdHotel]); // Add to filtered hotels
       setOpenDialog(false); // Close the dialog after creating the hotel

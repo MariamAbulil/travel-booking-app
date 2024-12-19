@@ -23,31 +23,9 @@ const AdminPage: React.FC = () => {
     }
   };
 
-  const handleEdit = (item: any) => {
-    setSelectedItem(item);
-    setIsSlidingFormOpen(true);
-  };
-
-  const handleFormClose = () => {
-    setIsSlidingFormOpen(false);
-    setSelectedItem(null);
-  };
-
-  const handleLogout = () => {
-    // delete token from LocalStorage
-    localStorage.setItem("authToken", "");
-
-    // go to login page
-    window.location.href = "/login";
-  };
-
   return (
     <div className="admin-page">
       <Sidebar />
-     
-      <button className="logout-button" onClick={handleLogout}>
-        Logout
-      </button>
     </div>
   );
 };
