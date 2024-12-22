@@ -9,6 +9,7 @@ import {
   Box,
   Grid2,
 } from "@mui/material";
+import hotelImage from "../../Assets/hotel.jpeg";
 
 interface Room {
   cityName: string;
@@ -209,6 +210,9 @@ const RecentlyVisitedHotels: React.FC<{ userId?: string }> = ({ userId }) => {
                 src={hotel.thumbnailUrl}
                 alt={hotel.hotelName}
                 className="object-cover w-full h-48 rounded-t-lg"
+                onError={(e: any) => {
+                  e.currentTarget.src = hotelImage;
+                }}
               />
               <CardContent>
                 <Typography variant="h6">{hotel.hotelName}</Typography>
@@ -257,7 +261,9 @@ const TrendingDestinations: React.FC = () => {
               />
               <CardContent>
                 <Typography variant="h6">{destination.cityName}</Typography>
-                <Typography color="textSecondary">{destination.countryName}</Typography>
+                <Typography color="textSecondary">
+                  {destination.countryName}
+                </Typography>
                 <Typography variant="body2" color="textSecondary">
                   {destination.description}
                 </Typography>
