@@ -179,7 +179,7 @@ const RecentlyVisitedHotels: React.FC<{ userId?: string }> = ({ userId }) => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/home/users/0/recent-hotels",
+        `https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/home/users/${userId}/recent-hotels`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
