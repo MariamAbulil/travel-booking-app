@@ -5,10 +5,11 @@ interface Hotel {
   id: string;
   name: string;
   location: string;
-  price: number;
+  hotelName: string;
+  roomPrice: number;
   starRating: number;
   description: string;
-  thumbnail: string;
+  roomPhotoUrl: string;
 }
 
 interface Amenity {
@@ -136,10 +137,10 @@ const SearchPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {results.map((hotel) => (
               <div key={hotel.id} className="border rounded p-4">
-                <img src={hotel.thumbnail} alt={hotel.name} className="w-full h-32 object-cover rounded mb-2" />
-                <h3 className="text-lg font-bold">{hotel.name}</h3>
+                <img src={hotel.roomPhotoUrl} alt={hotel.hotelName} className="w-full h-32 object-cover rounded mb-2" />
+                <h3 className="text-lg font-bold">{hotel.hotelName}</h3>
                 <p className="text-sm">{hotel.description}</p>
-                <p className="text-md font-semibold">Price: ${hotel.price} per night</p>
+                <p className="text-md font-semibold">Price: ${hotel.roomPrice} per night</p>
                 <p className="text-sm">Rating: {hotel.starRating} Stars</p>
               </div>
             ))}
