@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface Hotel {
   id: string;
-  name: string;
-  location: string;
   hotelName: string;
+  location: string;
   roomPrice: number;
   starRating: number;
   description: string;
@@ -19,6 +18,7 @@ interface Amenity {
 
 const SearchPage: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { city, checkIn, checkOut, adults, children, rooms } = location.state || {};
   const [results, setResults] = useState<Hotel[]>([]);
   const [minPrice, setMinPrice] = useState<number>(0);
@@ -26,6 +26,7 @@ const SearchPage: React.FC = () => {
   const [starRating, setStarRating] = useState<number | "">(0);
   const [amenities, setAmenities] = useState<string[]>([]);
   const [availableAmenities, setAvailableAmenities] = useState<Amenity[]>([]);
+  const [cart, setCart] = useState<Hotel[]>([]);
 
   useEffect(() => {
     const fetchAmenities = async () => {
@@ -44,7 +45,7 @@ const SearchPage: React.FC = () => {
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        const response = await fetch(`https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/home/search?city=${city}&${checkIn? `checkInDate=${checkIn}`: ""}&${checkOut? `checkOutDate=${checkOut}`: ""}&adults=${adults}&children=${children}&rooms=${rooms}&priceMin=${minPrice}&priceMax=${maxPrice}&starRate=${starRating}&amenities=${amenities.join(",")}`);
+        const response = await fetch(`https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/home/search?city=${city}&${checkIn ? `checkInDate=${checkIn}` : ""}&${checkOut ? `checkOutDate=${checkOut}` : ""}&adults=${adults}&children=${children}&rooms=${rooms}&priceMin=${minPrice}&priceMax=${maxPrice}&starRate=${starRating}&amenities=${amenities.join(",")}`);
         
         if (!response.ok) {
           const errorText = await response.text();
@@ -71,21 +72,32 @@ const SearchPage: React.FC = () => {
     }
   };
 
+  const addToCart = (hotel: Hotel) => {
+    setCart((prevCart) => [...prevCart, hotel]);
+  };
+
+  const goToCheckout = () => {
+    navigate('/checkout');
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      {/* Shopping Cart */}
+      <div className="absolute top-4 right-4">
+        <button className="bg-blue-500 text-white px-4 py-2 rounded-full">
+          Cart ({cart.length})
+        </button>
+      </div>
+
       <h1 className="text-2xl font-bold mb-4">Search Results for "{city}"</h1>
       <p className="mb-4">
         Check-in: {checkIn} - Check-out: {checkOut} | Adults: {adults} | Children: {children} | Rooms: {rooms}
       </p>
 
-      {/* Flex container to divide filters and results */}
       <div className="flex flex-col lg:flex-row gap-8">
-        
-        {/* Filters Section (on the left) */}
+        {/* Filters */}
         <div className="flex-none w-full lg:w-1/4">
           <h2 className="text-xl font-semibold mb-2">Filters</h2>
-          
-          {/* Star Rating Filter */}
           <div className="mb-4">
             <label className="block mb-1">Star Rating</label>
             <select className="border rounded p-2 w-full" value={starRating} onChange={(e) => handleFilterChange(e, "starRating")}>
@@ -97,8 +109,6 @@ const SearchPage: React.FC = () => {
               <option value={5}>5 Stars</option>
             </select>
           </div>
-
-          {/* Price Range Filters */}
           <div className="mb-4">
             <label className="block mb-1">Min Price</label>
             <input
@@ -117,8 +127,6 @@ const SearchPage: React.FC = () => {
               onChange={(e) => setMaxPrice(Number(e.target.value))}
             />
           </div>
-
-          {/* Amenities Filter */}
           <div className="mb-4">
             <h2 className="text-xl font-semibold mb-2">Amenities</h2>
             <select multiple className="border rounded p-2 w-full" onChange={(e) => handleFilterChange(e as React.ChangeEvent<HTMLSelectElement>, "amenities")}>
@@ -131,7 +139,7 @@ const SearchPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Results Section (on the right) */}
+        {/* Hotel Listings */}
         <div className="flex-grow w-full lg:w-3/4">
           <h2 className="text-xl font-semibold mb-2">Hotels</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -142,8 +150,31 @@ const SearchPage: React.FC = () => {
                 <p className="text-sm">{hotel.description}</p>
                 <p className="text-md font-semibold">Price: ${hotel.roomPrice} per night</p>
                 <p className="text-sm">Rating: {hotel.starRating} Stars</p>
+                <button
+                  onClick={() => addToCart(hotel)}
+                  className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+                >
+                  Add to Cart
+                </button>
               </div>
             ))}
+          </div>
+
+          {/* Cart */}
+          <div className="mt-8">
+            <h2 className="text-xl font-semibold mb-2">Shopping Cart</h2>
+            <ul>
+              {cart.map((hotel, index) => (
+                <li key={index} className="border-b py-2">
+                  {hotel.hotelName} - ${hotel.roomPrice} per night
+                </li>
+              ))}
+            </ul>
+            {cart.length > 0 && (
+              <button onClick={goToCheckout} className="mt-4 bg-green-500 text-white px-4 py-2 rounded">
+                Proceed to Checkout
+              </button>
+            )}
           </div>
         </div>
       </div>

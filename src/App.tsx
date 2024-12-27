@@ -6,8 +6,11 @@ import {
 } from "react-router-dom";
 import { default as LoginPage } from "./Pages/login";
 import { default as HomePage } from "./Pages/home";
-import { default as AdminPage } from "./Pages/admin"; // Add more admin pages
-import { default as SearchPage } from "./Pages/search";  // إضافة صفحة البحث هنا
+import { default as AdminPage } from "./Pages/admin";
+import { default as SearchPage } from "./Pages/search";
+//import { default as HotelPage } from "./Pages/hotel";
+import { default as CheckoutPage } from "./Pages/checkout/index";
+import { default as ConfirmationPage } from "./Pages/confirmation";
 import AuthRoute from "./Components/AuthRoute";
 import ProtectedRoute from "./Components/ProtectedRoute";
 
@@ -15,7 +18,6 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        {/* Route for /login - Check if user is already logged in */}
         <Route
           path="/login"
           element={
@@ -27,7 +29,6 @@ const App: React.FC = () => {
 
         <Route path="/" element={<Navigate to="/login" />} />
 
-        {/* Protected Routes */}
         <Route
           path="/home"
           element={
@@ -46,7 +47,6 @@ const App: React.FC = () => {
           }
         />
 
-        {/* صفحة البحث */}
         <Route
           path="/search"
           element={
@@ -56,12 +56,38 @@ const App: React.FC = () => {
           }
         />
 
-        {/* Add additional routes for user and admin here */}
+       {/*  <Route
+          path="/hotel/:hotelId"
+          element={
+            <ProtectedRoute role="user">
+              <HotelPage />
+            </ProtectedRoute>
+          }
+        /> */}
+
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute role="user">
+              <CheckoutPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/confirmation/:bookingId"
+          element={
+            <ProtectedRoute role="user">
+              <ConfirmationPage />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/admin/settings"
           element={
             <ProtectedRoute role="admin">
-              <AdminPage /> {/* Replace with your Admin Settings Page */}
+              <AdminPage />
             </ProtectedRoute>
           }
         />
@@ -70,7 +96,7 @@ const App: React.FC = () => {
           path="/user/profile"
           element={
             <ProtectedRoute role="user">
-              <HomePage /> {/* Replace with your User Profile Page */}
+              <HomePage />
             </ProtectedRoute>
           }
         />
