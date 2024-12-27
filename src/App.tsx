@@ -7,6 +7,7 @@ import {
 import { default as LoginPage } from "./Pages/login";
 import { default as HomePage } from "./Pages/home";
 import { default as AdminPage } from "./Pages/admin"; // Add more admin pages
+import { default as SearchPage } from "./Pages/search";  // إضافة صفحة البحث هنا
 import AuthRoute from "./Components/AuthRoute";
 import ProtectedRoute from "./Components/ProtectedRoute";
 
@@ -41,6 +42,16 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute role="admin">
               <AdminPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* صفحة البحث */}
+        <Route
+          path="/search"
+          element={
+            <ProtectedRoute role="user">
+              <SearchPage />
             </ProtectedRoute>
           }
         />
