@@ -17,7 +17,7 @@ const LoginPage = () => {
     if (error) {
       setError(error);
     } else {
-      navigate(userType === "user" ? "/home" : "/admin");
+      navigate(userType === "user" ? "/home" : "/admin");//userType in localStorage 
     }
   };
 

@@ -1,7 +1,8 @@
+
 import { Navigate } from "react-router-dom";
 
 interface ProtectedRouteProps {
-  children: any;
+  children: React.ReactNode;
   role?: "user" | "admin";
 }
 
@@ -17,7 +18,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, role }) => {
     return <Navigate to="/login" />; // Redirect to login if role doesn't match
   }
 
-  return children;
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;

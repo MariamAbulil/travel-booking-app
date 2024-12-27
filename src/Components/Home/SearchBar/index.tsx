@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-    TextField,
-    Button,
-    Grid,
-    Box,
-} from "@mui/material";
+import { TextField, Button, Grid, Box } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 
 const SearchBar: React.FC = () => {
@@ -21,14 +16,18 @@ const SearchBar: React.FC = () => {
   const navigate = useNavigate();
 
   const handleSearch = () => {
-    // Perform search logic here, e.g., fetch data from API
-    // Example: 
-    // const searchResults = await fetchSearchResults(searchQuery);
-
-    // Navigate to the search page with search results
-    navigate('/search', { state: { searchQuery, checkIn, checkOut, adults, children, rooms } });
+    navigate('/search', {
+      state: {
+        searchQuery,
+        checkIn,
+        checkOut,
+        adults,
+        children,
+        rooms,
+      }
+    });
   };
-
+  
   return (
     <Box className="p-4 bg-white shadow-md rounded-lg">
       <Grid container spacing={2}>
@@ -36,7 +35,7 @@ const SearchBar: React.FC = () => {
           <TextField
             fullWidth
             label="Search for hotels, cities..."
-            variant ="outlined"
+            variant="outlined"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
