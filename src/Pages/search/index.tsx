@@ -19,7 +19,7 @@ interface Amenity {
 
 const SearchPage: React.FC = () => {
   const location = useLocation();
-  const { searchQuery, checkIn, checkOut, adults, children, rooms } = location.state || {};
+  const { city, checkIn, checkOut, adults, children, rooms } = location.state || {};
   const [results, setResults] = useState<Hotel[]>([]);
   const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(500);
@@ -44,7 +44,7 @@ const SearchPage: React.FC = () => {
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        const response = await fetch(`https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/home/search?checkInDate=${checkIn}&checkOutDate=${checkOut}&adults=${adults}&children=${children}&rooms=${rooms}&priceMin=${minPrice}&priceMax=${maxPrice}&starRate=${starRating}&amenities=${amenities.join(",")}`);
+        const response = await fetch(`https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/home/search?city=${city}&${checkIn? `checkInDate=${checkIn}`: ""}&${checkOut? `checkOutDate=${checkOut}`: ""}&adults=${adults}&children=${children}&rooms=${rooms}&priceMin=${minPrice}&priceMax=${maxPrice}&starRate=${starRating}&amenities=${amenities.join(",")}`);
         
         if (!response.ok) {
           const errorText = await response.text();
@@ -73,7 +73,7 @@ const SearchPage: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-4">Search Results for "{searchQuery}"</h1>
+      <h1 className="text-2xl font-bold mb-4">Search Results for "{city}"</h1>
       <p className="mb-4">
         Check-in: {checkIn} - Check-out: {checkOut} | Adults: {adults} | Children: {children} | Rooms: {rooms}
       </p>

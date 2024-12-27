@@ -3,22 +3,18 @@ import { TextField, Button, Grid, Box } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 
 const SearchBar: React.FC = () => {
-  const [checkIn, setCheckIn] = useState<string>(
-    new Date().toISOString().split("T")[0]
-  );
-  const [checkOut, setCheckOut] = useState<string>(
-    new Date(Date.now() + 86400000).toISOString().split("T")[0]
-  );
+  const [checkIn, setCheckIn] = useState<string>();
+  const [checkOut, setCheckOut] = useState<string>();
   const [adults, setAdults] = useState<number>(2);
   const [children, setChildren] = useState<number>(0);
   const [rooms, setRooms] = useState<number>(1);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [city, setCity] = useState('');
   const navigate = useNavigate();
 
   const handleSearch = () => {
     navigate('/search', {
       state: {
-        searchQuery,
+        city,
         checkIn,
         checkOut,
         adults,
@@ -34,10 +30,10 @@ const SearchBar: React.FC = () => {
         <Grid item xs={12} sm={4}>
           <TextField
             fullWidth
-            label="Search for hotels, cities..."
+            label="Search for cities..."
             variant="outlined"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
           />
         </Grid>
         <Grid item xs={12} sm={2}>
