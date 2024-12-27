@@ -43,7 +43,7 @@ const SearchPage: React.FC = () => {
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        const response = await fetch(`https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/search?checkInDate=${checkIn}&checkOutDate=${checkOut}&adults=${adults}&children=${children}&rooms=${rooms}&priceMin=${minPrice}&priceMax=${maxPrice}&starRate=${starRating}&amenities=${amenities.join(",")}`);
+        const response = await fetch(`https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/home/search?checkInDate=${checkIn}&checkOutDate=${checkOut}&adults=${adults}&children=${children}&rooms=${rooms}&priceMin=${minPrice}&priceMax=${maxPrice}&starRate=${starRating}&amenities=${amenities.join(",")}`);
         
         if (!response.ok) {
           const errorText = await response.text();
