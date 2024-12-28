@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 
 interface Hotel {
   id: string;
@@ -77,14 +77,14 @@ const SearchPage: React.FC = () => {
   };
 
   const goToCheckout = () => {
-    navigate('/checkout');
+    navigate('/checkout', { state: { cart } });
   };
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Shopping Cart */}
+      {/* Cart Button */}
       <div className="absolute top-4 right-4">
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-full">
+        <button onClick={goToCheckout} className="bg-blue-500 text-white px-4 py-2 rounded-full">
           Cart ({cart.length})
         </button>
       </div>
@@ -146,7 +146,11 @@ const SearchPage: React.FC = () => {
             {results.map((hotel) => (
               <div key={hotel.id} className="border rounded p-4">
                 <img src={hotel.roomPhotoUrl} alt={hotel.hotelName} className="w-full h-32 object-cover rounded mb-2" />
-                <h3 className="text-lg font-bold">{hotel.hotelName}</h3>
+                <h3 className="text-lg font-bold">
+                  <Link to={`/hotel/${hotel.id}`} className="text-blue-500 hover:underline">
+                    {hotel.hotelName}
+                  </Link>
+                </h3>
                 <p className="text-sm">{hotel.description}</p>
                 <p className="text-md font-semibold">Price: ${hotel.roomPrice} per night</p>
                 <p className="text-sm">Rating: {hotel.starRating} Stars</p>
@@ -158,23 +162,6 @@ const SearchPage: React.FC = () => {
                 </button>
               </div>
             ))}
-          </div>
-
-          {/* Cart */}
-          <div className="mt-8">
-            <h2 className="text-xl font-semibold mb-2">Shopping Cart</h2>
-            <ul>
-              {cart.map((hotel, index) => (
-                <li key={index} className="border-b py-2">
-                  {hotel.hotelName} - ${hotel.roomPrice} per night
-                </li>
-              ))}
-            </ul>
-            {cart.length > 0 && (
-              <button onClick={goToCheckout} className="mt-4 bg-green-500 text-white px-4 py-2 rounded">
-                Proceed to Checkout
-              </button>
-            )}
           </div>
         </div>
       </div>
