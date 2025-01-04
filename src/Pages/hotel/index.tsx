@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { default as ConfirmationPage } from "../confirmation"; // تأكد من أن المسار صحيح
+import { default as ConfirmationPage } from "../confirmation"; 
 
 interface Room {
   id: string;

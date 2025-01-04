@@ -56,14 +56,7 @@ const App: React.FC = () => {
           }
         />
 
-        <Route
-          path="/hotel/:hotelId"
-          element={
-            <ProtectedRoute role="user">
-              <HotelPage />
-            </ProtectedRoute>
-          }
-        />
+       
         <Route path="/hotel/:hotelId" element={<HotelPage />} />
 
         <Route
